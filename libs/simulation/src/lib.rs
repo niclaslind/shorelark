@@ -158,7 +158,7 @@ impl Simulation {
             .world
             .animals
             .iter()
-            .map(|animal| AnimalIndividual::from_animal(animal))
+            .map(AnimalIndividual::from_animal)
             .collect();
 
         // Step 2: Evolve birdies
