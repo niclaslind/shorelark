@@ -6,11 +6,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-nalgebra = { version= "0.26", features = ["rand-no-std"] }
-rand = "0.8"
+nalgebra = { version = "0.29.0", features = ["rand-no-std"] }
+rand = "0.8.4"
 
 lib-neural-network = { path = "../neural-network" }
 lib-genetic-algorithm = { path = "../genetic-algorithm" }
 
 [dev-dependencies]
-test-case = "1.1"
+test-case = "1.2.0"
