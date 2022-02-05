@@ -17,6 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: codecov/codecov-action@v2
+      with:
+        files: ./codecov.yml
     - name: Build
       run: |
         rustup override set nightly 
