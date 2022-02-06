@@ -2,7 +2,6 @@
 #![feature(crate_visibility_modifier)]
 #![feature(type_alias_impl_trait)]
 
-
 use std::{iter::FromIterator, ops::Index};
 
 pub use self::{
@@ -68,18 +67,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
-
     use rand::SeedableRng;
     use rand_chacha::ChaCha8Rng;
 
     use super::*;
-
-    fn chromosome() -> Chromosome {
-        Chromosome {
-            genes: vec![3.0, 1.0, 2.0],
-        }
-    }
 
     fn actual(chance: f32, coeff: f32) -> Vec<f32> {
         let mut child = vec![1.0, 2.0, 3.0, 4.0, 5.0].into_iter().collect();
@@ -175,155 +166,6 @@ mod tests {
                 approx::assert_relative_eq!(actual.as_slice(), expected.as_slice());
             }
         }
-    }
-
-    mod len {
-        use super::*;
-
-        #[test]
-        fn test() {
-            assert_eq!(chromosome().len(), 3);
-        }
-    }
-
-    mod iter {
-        use super::*;
-
-        #[test]
-        fn test() {
-            let chromosome = chromosome();
-            let genes: Vec<_> = chromosome.iter().collect();
-
-            assert_eq!(genes.len(), 3);
-            approx::assert_relative_eq!(genes[0], &3.0);
-            approx::assert_relative_eq!(genes[1], &1.0);
-            approx::assert_relative_eq!(genes[2], &2.0);
-        }
-    }
-
-    mod iter_mut {
-        use super::*;
-
-        #[test]
-        fn test() {
-            let mut chromosome = chromosome();
-
-            chromosome.iter_mut().for_each(|gene| {
-                *gene *= 10.0;
-            });
-
-            let genes: Vec<_> = chromosome.iter().collect();
-
-            assert_eq!(genes.len(), 3);
-            approx::assert_relative_eq!(genes[0], &30.0);
-            approx::assert_relative_eq!(genes[1], &10.0);
-            approx::assert_relative_eq!(genes[2], &20.0);
-        }
-    }
-
-    mod index {
-        use super::*;
-
-        #[test]
-        fn test() {
-            let chromesome = Chromosome {
-                genes: vec![3.0, 1.0, 2.0],
-            };
-
-            approx::assert_relative_eq!(chromesome[0], 3.0);
-            approx::assert_relative_eq!(chromesome[1], 1.0);
-            approx::assert_relative_eq!(chromesome[2], 2.0);
-        }
-    }
-
-    mod from_iterator {
-        use std::vec;
-
-        use super::*;
-
-        #[test]
-        fn test() {
-            let chromosome: Chromosome = vec![3.0, 1.0, 2.0].into_iter().collect();
-
-            approx::assert_relative_eq!(chromosome[0], 3.0);
-            approx::assert_relative_eq!(chromosome[1], 1.0);
-            approx::assert_relative_eq!(chromosome[2], 2.0);
-        }
-    }
-
-    mod into_iterator {
-        use std::vec;
-
-        use super::*;
-
-        #[test]
-        fn test() {
-            let chromosome = Chromosome {
-                genes: vec![3.0, 1.0, 2.0],
-            };
-
-            let genes: Vec<_> = chromosome.into_iter().collect();
-
-            assert_eq!(genes.len(), 3);
-            approx::assert_relative_eq!(genes[0], 3.0);
-            approx::assert_relative_eq!(genes[1], 1.0);
-            approx::assert_relative_eq!(genes[2], 2.0);
-        }
-    }
-
-    #[test]
-    fn test_crossover() {
-        let mut rng = ChaCha8Rng::from_seed(Default::default());
-        let parent_a: Chromosome = (1..=100).map(|n| n as f32).collect();
-        let parent_b: Chromosome = (1..=100).map(|n| -n as f32).collect();
-
-        let child = UniformCrossover::default().crossover(&mut rng, &parent_a, &parent_b);
-
-        // Numbers of genes different between `child` and `parent_b`
-        let diff_a = child
-            .iter()
-            .zip(parent_a)
-            .filter(|(c, p)| (*c - p).abs() > f32::EPSILON)
-            .count();
-        let diff_b = child
-            .iter()
-            .zip(parent_b)
-            .filter(|(c, p)| (*c - p).abs() > f32::EPSILON)
-            .count();
-
-        assert_eq!(diff_a, 49);
-        assert_eq!(diff_b, 51);
-    }
-
-    #[test]
-    fn test() {
-        let method = RouletteWheelSelection::new();
-        let mut rng = ChaCha8Rng::from_seed(Default::default());
-
-        let population = vec![
-            TestIndividual::new(2.0),
-            TestIndividual::new(1.0),
-            TestIndividual::new(4.0),
-            TestIndividual::new(3.0),
-        ];
-
-        let actual_histogram: BTreeMap<i32, _> = (0..1000)
-            .map(|_| method.select(&mut rng, &population))
-            .fold(Default::default(), |mut histogram, individual| {
-                *histogram.entry(individual.fitness() as _).or_default() += 1;
-
-                histogram
-            });
-
-        let expected_histogram = maplit::btreemap! {
-            // fitness => how many times this fitness has been chosen
-            1 => 98,
-            2 => 202,
-            3 => 278,
-            4 => 422,
-        };
-
-        assert_eq!(actual_histogram, expected_histogram);
     }
 }
 
