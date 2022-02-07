@@ -43,3 +43,36 @@ impl Layer {
         Self::new(neurons)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    mod new_layer {
+        use super::*;
+
+        #[test]
+        #[should_panic]
+        fn with_empty_neurons() {
+            Layer::new(vec![]);
+        }
+
+        #[test]
+        fn with_no_empty_neurons() {
+            let layer = Layer::new(vec![Neuron::new(3.13, vec![3.15])]);
+            assert_eq!(1, layer.neurons.len());
+        }
+    }
+
+    #[test]
+    fn test_propogate() {
+        let layer = Layer::new(vec![
+            Neuron::new(3.14, vec![3.15, 6.15, 1.4, 8.4, 1.1]),
+            Neuron::new(1.2, vec![3.23, 1.23, 5.23, 9.0, 1.2]),
+        ]);
+        assert_eq!(
+            vec![794.58997, 821.2],
+            layer.propagate(vec![32.1, 13.5, 12.4, 53.3, 129.3])
+        );
+    }
+}
