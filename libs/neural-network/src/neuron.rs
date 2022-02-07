@@ -43,3 +43,23 @@ impl Neuron {
         Self::new(bias, weights)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    mod new_neuron {
+        use super::*;
+
+        #[test]
+        #[should_panic]
+        fn with_empty_weights() {
+            Neuron::new(3.3, vec![]);
+        }
+
+        #[test]
+        fn with_no_empty_weights() {
+            Neuron::new(3.3, vec![3.12, 3.14, 3.17]);
+        }
+    }
+}
