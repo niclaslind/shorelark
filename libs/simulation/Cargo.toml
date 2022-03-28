@@ -7,10 +7,10 @@ edition = "2021"
 
 [dependencies]
 nalgebra = { version = "0.30.1", features = ["rand-no-std"] }
-rand = "0.8.4"
+rand = "0.8.5"
 
 lib-neural-network = { path = "../neural-network" }
 lib-genetic-algorithm = { path = "../genetic-algorithm" }
 
 [dev-dependencies]
-test-case = "1.2.3"
+test-case = "2.0.2"
