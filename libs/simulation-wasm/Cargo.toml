@@ -9,7 +9,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-serde = { version = "1.0.138", features = ["derive"] }
+serde = { version = "1.0.139", features = ["derive"] }
 rand = "0.8.5"
 wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
 getrandom = { version = "0.2.6", features = ["js"] }
