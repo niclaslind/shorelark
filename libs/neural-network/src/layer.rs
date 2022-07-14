@@ -46,8 +46,6 @@ impl Layer {
 
 #[cfg(test)]
 mod tests {
-    use std::f32::consts::PI;
-
     use super::*;
 
     mod new_layer {
@@ -69,7 +67,7 @@ mod tests {
     #[test]
     fn test_propogate() {
         let layer = Layer::new(vec![
-            Neuron::new(PI, vec![3.15, 6.15, 1.4, 8.4, 1.1]),
+            Neuron::new(3.14, vec![3.15, 6.15, 1.4, 8.4, 1.1]),
             Neuron::new(1.2, vec![3.23, 1.23, 5.23, 9.0, 1.2]),
         ]);
         assert_eq!(
