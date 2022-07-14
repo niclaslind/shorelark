@@ -1,4 +1,3 @@
-#![feature(crate_visibility_modifier)]
 pub use self::{animal::*, animal_individual::*, brain::*, eye::*, food::*, world::*};
 use lib_genetic_algorithm as ga;
 use lib_neural_network as nn;

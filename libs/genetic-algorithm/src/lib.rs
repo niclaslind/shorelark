@@ -1,5 +1,3 @@
-// #![feature(min_type_alias_impl_trait)]
-#![feature(crate_visibility_modifier)]
 #![feature(type_alias_impl_trait)]
 
 use std::{iter::FromIterator, ops::Index};

@@ -2,8 +2,8 @@ use crate::*;
 
 #[derive(Debug)]
 pub struct World {
-    crate animals: Vec<Animal>,
-    crate foods: Vec<Food>,
+    pub animals: Vec<Animal>,
+    pub foods: Vec<Food>,
 }
 
 impl World {
