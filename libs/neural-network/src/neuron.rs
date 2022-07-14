@@ -49,6 +49,8 @@ mod tests {
     use super::*;
 
     mod new_neuron {
+        use std::f32::consts::PI;
+
         use super::*;
 
         #[test]
@@ -59,7 +61,7 @@ mod tests {
 
         #[test]
         fn with_no_empty_weights() {
-            Neuron::new(3.3, vec![3.12, 3.14, 3.17]);
+            Neuron::new(3.3, vec![3.12, PI, 3.17]);
         }
     }
 }
