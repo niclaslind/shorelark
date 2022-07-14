@@ -2,7 +2,7 @@ use crate::*;
 
 #[derive(Clone, Debug)]
 pub struct Chromosome {
-    crate genes: Vec<f32>,
+    genes: Vec<f32>,
 }
 
 impl Chromosome {

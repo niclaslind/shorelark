@@ -2,7 +2,7 @@ use crate::*;
 
 #[derive(Debug)]
 pub struct Brain {
-    crate nn: nn::Network,
+    pub nn: nn::Network,
 }
 
 impl Brain {
@@ -12,13 +12,13 @@ impl Brain {
         }
     }
 
-    crate fn from_chromosome(chromosome: ga::Chromosome, eye: &Eye) -> Self {
+    pub fn from_chromosome(chromosome: ga::Chromosome, eye: &Eye) -> Self {
         Self {
             nn: nn::Network::from_weights(&Self::topology(eye), chromosome),
         }
     }
 
-    crate fn as_chromosome(&self) -> ga::Chromosome {
+    pub fn as_chromosome(&self) -> ga::Chromosome {
         self.nn.weights().collect()
     }
 

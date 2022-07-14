@@ -2,7 +2,7 @@ use crate::*;
 
 #[derive(Debug)]
 pub struct Food {
-    crate position: na::Point2<f32>,
+    pub position: na::Point2<f32>,
 }
 
 impl Food {

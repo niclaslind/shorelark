@@ -8,7 +8,7 @@ pub struct Statistics {
 }
 
 impl Statistics {
-    crate fn new<I>(population: &[I]) -> Self
+    pub fn new<I>(population: &[I]) -> Self
     where
         I: Individual,
     {
