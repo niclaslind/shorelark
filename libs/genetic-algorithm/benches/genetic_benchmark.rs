@@ -1,8 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use lib_genetic_algorithm::{
-    Chromosome, CrossoverMethod, GaussianMutation, MutationMethod, RouletteWheelSelection,
-    UniformCrossover,
-};
+use lib_genetic_algorithm::{CrossoverMethod, GaussianMutation, MutationMethod, UniformCrossover};
 use rand::SeedableRng;
 use rand_chacha::ChaCha8Rng;
 
@@ -33,14 +30,9 @@ fn uniform_crossover_benchmark(c: &mut Criterion) {
     });
 }
 
-fn roulette_wheel_selection_benchmark(c: &mut Criterion) {
-    let roulette_wheel_selection = RouletteWheelSelection::default();
-}
-
 criterion_group!(
     benches,
     guassian_mutation_benchmark,
     uniform_crossover_benchmark,
-    roulette_wheel_selection_benchmark,
 );
 criterion_main!(benches);
