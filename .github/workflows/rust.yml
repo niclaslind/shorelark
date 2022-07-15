@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install cargo Nextest
+      uses: baptiste0928/cargo-install@v1
+      with:
+        crate: cargo-nextest
+        locked: true 
     - name: Build
       run: |
         rustup override set nightly 
@@ -21,4 +26,4 @@ jobs:
     - name: Run tests
       run: |
         rustup override set nightly 
-        cargo test --workspace bth--verbose
+        cargo nextest run
