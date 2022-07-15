@@ -35,7 +35,7 @@ jobs:
         with:
           name: nextest-archive
           path: nextest-archive.tar.zst
-  
+
   run-tests-partitioned:
     name: Run tests with partitioning
     runs-on: ubuntu-latest
