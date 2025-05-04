@@ -62,7 +62,7 @@ const GENERATION_LENGTH: usize = 2500;
 
 pub struct Simulation {
     world: World,
-    ga: ga::GeneticAlgorigthm<ga::RouletteWheelSelection>,
+    ga: ga::GeneticAlgorithm<ga::RouletteWheelSelection>,
     age: usize,
 }
 
@@ -70,7 +70,7 @@ impl Simulation {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         let world = World::random(rng);
 
-        let ga = ga::GeneticAlgorigthm::new(
+        let ga = ga::GeneticAlgorithm::new(
             ga::RouletteWheelSelection::new(),
             ga::UniformCrossover,
             ga::GaussianMutation::new(0.01, 0.3),

@@ -15,13 +15,13 @@ mod mutation;
 mod selection;
 mod statistics;
 
-pub struct GeneticAlgorigthm<S> {
+pub struct GeneticAlgorithm<S> {
     selection_method: S,
     crossover_method: Box<dyn CrossoverMethod>,
     mutation_method: Box<dyn MutationMethod>,
 }
 
-impl<S> GeneticAlgorigthm<S>
+impl<S> GeneticAlgorithm<S>
 where
     S: SelectionMethod,
 {
@@ -183,7 +183,7 @@ mod test {
     fn test() {
         let mut rng = ChaCha8Rng::from_seed(Default::default());
 
-        let ga = GeneticAlgorigthm::new(
+        let ga = GeneticAlgorithm::new(
             RouletteWheelSelection::new(),
             UniformCrossover,
             GaussianMutation::new(0.5, 0.5),
