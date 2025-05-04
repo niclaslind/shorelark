@@ -31,8 +31,7 @@ const SPEED_MAX: f32 = 0.005;
 /// Assuming our bird is currently flying with speed=0.5, when the brain
 /// yells "stop flying!", a SPEED_ACCEL of:
 ///
-/// - 0.1 = makes it take 5 steps ("5 seconds") for the bird to actually
-///         slow down to SPEED_MIN,
+/// - 0.1 = makes it take 5 steps ("5 seconds") for the bird to actually slow down to SPEED_MIN,
 ///
 /// - 0.5 = makes it take 1 step for the bird to slow down to SPEED_MIN.
 ///
@@ -63,7 +62,7 @@ const GENERATION_LENGTH: usize = 2500;
 
 pub struct Simulation {
     world: World,
-    ga: ga::GeneticAlgorigthm<ga::RouletteWheelSelection>,
+    ga: ga::GeneticAlgorithm<ga::RouletteWheelSelection>,
     age: usize,
 }
 
@@ -71,9 +70,9 @@ impl Simulation {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         let world = World::random(rng);
 
-        let ga = ga::GeneticAlgorigthm::new(
+        let ga = ga::GeneticAlgorithm::new(
             ga::RouletteWheelSelection::new(),
-            ga::UniformCrossover::default(),
+            ga::UniformCrossover,
             ga::GaussianMutation::new(0.01, 0.3),
         );
 

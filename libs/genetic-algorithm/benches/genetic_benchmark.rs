@@ -14,7 +14,7 @@ fn guassian_mutation_benchmark(c: &mut Criterion) {
 }
 
 fn uniform_crossover_benchmark(c: &mut Criterion) {
-    let uniform_crossover = UniformCrossover::default();
+    let uniform_crossover = UniformCrossover;
     let mut rng = ChaCha8Rng::from_seed(Default::default());
     let parent_a = vec![1.0, 2.0, 3.0, 4.0, 5.0].into_iter().collect();
     let parent_b = vec![5.0, 4.0, 3.0, 2.0, 1.0].into_iter().collect();
