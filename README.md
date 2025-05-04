@@ -5,6 +5,8 @@
 
 Implementation of NLP with RUST + WASM by following https://pwy.io/en/posts/learning-to-fly-pt1/ tutorial. 
 
+![App Screenshot](docs/assets/shorelark.png)
+
 ## ✅ Prerequisites
 
 Make sure you have the following installed:
