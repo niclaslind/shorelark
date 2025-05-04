@@ -25,7 +25,7 @@ mod tests {
         let parent_a: Chromosome = (1..=100).map(|n| n as f32).collect();
         let parent_b: Chromosome = (1..=100).map(|n| -n as f32).collect();
 
-        let child = UniformCrossover::default().crossover(&mut rng, &parent_a, &parent_b);
+        let child = UniformCrossover.crossover(&mut rng, &parent_a, &parent_b);
 
         // Numbers of genes different between `child` and `parent_b`
         let diff_a = child

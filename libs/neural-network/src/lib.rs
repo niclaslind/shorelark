@@ -1,5 +1,3 @@
-#![feature(array_methods)]
-
 pub use self::layer_topology::*;
 
 use self::{layer::*, neuron::*};
