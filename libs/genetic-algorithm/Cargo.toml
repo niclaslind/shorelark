@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 maplit = "1.0.2"
-rand = "0.8.5"
+rand = "0.9.1"
 
 [dev-dependencies]
 criterion = "0.5.1"
