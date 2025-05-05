@@ -2,8 +2,11 @@
 [![codecov](https://codecov.io/gh/niclaslind/shorelark/branch/main/graph/badge.svg?token=DctFt73rMr)](https://codecov.io/gh/niclaslind/shorelark)
 [![dependency status](https://deps.rs/repo/github/niclaslind/shorelark/status.svg)](https://deps.rs/repo/github/niclaslind/shorelark)
 
+Learning to Fly: Simulating Evolution with Rust and WebAssembly
 
-Implementation of NLP with RUST + WASM by following https://pwy.io/en/posts/learning-to-fly-pt1/ tutorial. 
+This project is inspired by the "Learning to Fly" series by Patryk Wychowaniec . It demonstrates how to simulate evolution using neural networks and genetic algorithms in Rust, compiled to WebAssembly. The simulation features virtual birds navigating a 2D world to find food, with each bird's behavior controlled by a neural network that evolves over time. Designed for Rust beginners, the series introduces key concepts and guides you through building an interactive ecosystem from scratch.
+
+Explore the live simulation: https://shorelark.pwy.io 
 
 ![App Screenshot](docs/assets/shorelark.png)
 
