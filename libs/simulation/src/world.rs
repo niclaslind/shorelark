@@ -8,9 +8,13 @@ pub struct World {
 
 impl World {
     pub fn random(rng: &mut dyn Rng) -> Self {
-        let animals = (0..40).map(|_| Animal::random(rng)).collect();
+        Self::random_with(rng, 40, 60)
+    }
 
-        let foods = (0..60).map(|_| Food::random(rng)).collect();
+    pub fn random_with(rng: &mut dyn Rng, num_animals: usize, num_foods: usize) -> Self {
+        let animals = (0..num_animals).map(|_| Animal::random(rng)).collect();
+
+        let foods = (0..num_foods).map(|_| Food::random(rng)).collect();
 
         Self { animals, foods }
     }
@@ -37,6 +41,15 @@ mod tests {
 
         assert_eq!(world.animals().len(), 40);
         assert_eq!(world.foods().len(), 60);
+    }
+
+    #[test]
+    fn random_with_creates_the_requested_counts() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let world = World::random_with(&mut rng, 12, 34);
+
+        assert_eq!(world.animals().len(), 12);
+        assert_eq!(world.foods().len(), 34);
     }
 
     #[test]

@@ -81,6 +81,49 @@
     height: 10px;
     border-radius: 2px;
   }
+
+  #config {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 15px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: rgba(59, 70, 100, 0.85);
+    color: #e6e9f0;
+    font-size: 13px;
+  }
+
+  #config h4 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+  }
+
+  #config label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  #config input {
+    width: 90px;
+  }
+
+  #config button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background: #3b4664;
+    color: #e6e9f0;
+    margin-top: 4px;
+  }
+
+  #config button:hover {
+    background: #4c5a80;
+  }
 </style>
 
 <body>
@@ -106,6 +149,16 @@
       <span><i style="background: rgb(99, 170, 255)"></i>min</span>
     </div>
     <canvas id="chart" width="360" height="140"></canvas>
+  </div>
+
+  <div id="config">
+    <h4>simulation config</h4>
+    <label>animals <input id="cfg-num-animals" type="number" min="1" max="500" step="1" value="40"></label>
+    <label>foods <input id="cfg-num-foods" type="number" min="1" max="500" step="1" value="60"></label>
+    <label>mutation chance <input id="cfg-mutation-chance" type="number" min="0" max="1" step="0.01" value="0.01"></label>
+    <label>mutation coeff <input id="cfg-mutation-coeff" type="number" min="0" max="1" step="0.01" value="0.3"></label>
+    <label>max speed <input id="cfg-max-speed" type="number" min="0.001" max="0.05" step="0.001" value="0.005"></label>
+    <button id="config-apply">apply &amp; reset</button>
   </div>
 
   <script src="./bootstrap.js"></script>

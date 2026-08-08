@@ -61,21 +61,66 @@ const ROTATION_ACCEL: f32 = FRAC_PI_2;
 /// to live"; 2500 was chosen with a fair dice roll.
 const GENERATION_LENGTH: usize = 2500;
 
+/// Tunable knobs affecting how a [`Simulation`] is set up.
+///
+/// All fields have sane defaults (see [`Config::default`]) matching the
+/// values this simulation originally shipped with.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Config {
+    /// How many animals (birds) populate the world.
+    pub num_animals: usize,
+
+    /// How many foods populate the world.
+    pub num_foods: usize,
+
+    /// Probability of a single gene mutating during evolution.
+    ///
+    /// - 0.0 = no genes will be touched
+    /// - 1.0 = all genes will be touched
+    pub mutation_chance: f32,
+
+    /// Magnitude of a mutation, when it happens.
+    ///
+    /// - 0.0 = touched genes will not be modified
+    /// - 1.0 = touched genes will be += or -= by at most 3.0
+    pub mutation_coeff: f32,
+
+    /// Maximum speed a bird can reach.
+    pub max_speed: f32,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            num_animals: 40,
+            num_foods: 60,
+            mutation_chance: 0.01,
+            mutation_coeff: 0.3,
+            max_speed: SPEED_MAX,
+        }
+    }
+}
+
 pub struct Simulation {
     world: World,
     ga: ga::GeneticAlgorithm<ga::RouletteWheelSelection>,
     age: usize,
     generation: usize,
+    max_speed: f32,
 }
 
 impl Simulation {
     pub fn random(rng: &mut dyn Rng) -> Self {
-        let world = World::random(rng);
+        Self::random_with_config(rng, Config::default())
+    }
+
+    pub fn random_with_config(rng: &mut dyn Rng, config: Config) -> Self {
+        let world = World::random_with(rng, config.num_animals, config.num_foods);
 
         let ga = ga::GeneticAlgorithm::new(
             ga::RouletteWheelSelection::new(),
             ga::UniformCrossover,
-            ga::GaussianMutation::new(0.01, 0.3),
+            ga::GaussianMutation::new(config.mutation_chance, config.mutation_coeff),
         );
 
         Self {
@@ -83,6 +128,7 @@ impl Simulation {
             ga,
             age: 0,
             generation: 0,
+            max_speed: config.max_speed,
         }
     }
 
@@ -145,7 +191,7 @@ impl Simulation {
 
             let rotation = response[1].clamp(-ROTATION_ACCEL, ROTATION_ACCEL);
 
-            animal.speed = (animal.speed + speed).clamp(SPEED_MIN, SPEED_MAX);
+            animal.speed = (animal.speed + speed).clamp(SPEED_MIN, self.max_speed);
 
             animal.rotation = na::Rotation2::new(animal.rotation.angle() + rotation);
         }
@@ -251,5 +297,50 @@ mod tests {
 
         assert_eq!(simulation.world().animals().len(), 40);
         assert_eq!(simulation.world().foods().len(), 60);
+    }
+
+    #[test]
+    fn config_default_matches_the_historical_hard_coded_values() {
+        let config = Config::default();
+
+        assert_eq!(config.num_animals, 40);
+        assert_eq!(config.num_foods, 60);
+        assert_eq!(config.mutation_chance, 0.01);
+        assert_eq!(config.mutation_coeff, 0.3);
+        assert_eq!(config.max_speed, SPEED_MAX);
+    }
+
+    #[test]
+    fn random_with_config_honors_the_requested_population_size() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let config = Config {
+            num_animals: 5,
+            num_foods: 7,
+            ..Config::default()
+        };
+
+        let simulation = Simulation::random_with_config(&mut rng, config);
+
+        assert_eq!(simulation.world().animals().len(), 5);
+        assert_eq!(simulation.world().foods().len(), 7);
+    }
+
+    #[test]
+    fn random_with_config_honors_the_requested_max_speed() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let config = Config {
+            // Force every bird to accelerate to (and stay clamped at) a
+            // tiny max speed within a single step.
+            max_speed: 0.0011,
+            ..Config::default()
+        };
+
+        let mut simulation = Simulation::random_with_config(&mut rng, config);
+
+        simulation.step(&mut rng);
+
+        for animal in simulation.world().animals() {
+            assert!(animal.speed <= config.max_speed);
+        }
     }
 }

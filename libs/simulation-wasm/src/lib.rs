@@ -25,9 +25,29 @@ pub struct Simulation {
 #[wasm_bindgen]
 impl Simulation {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Self {
+    pub fn new(
+        num_animals: Option<usize>,
+        num_foods: Option<usize>,
+        mutation_chance: Option<f32>,
+        mutation_coeff: Option<f32>,
+        max_speed: Option<f32>,
+    ) -> Self {
+        let defaults = sim::Config::default();
+
+        let config = sim::Config {
+            num_animals: num_animals.unwrap_or(defaults.num_animals),
+            num_foods: num_foods.unwrap_or(defaults.num_foods),
+            mutation_chance: mutation_chance
+                .unwrap_or(defaults.mutation_chance)
+                .clamp(0.0, 1.0),
+            mutation_coeff: mutation_coeff
+                .unwrap_or(defaults.mutation_coeff)
+                .clamp(0.0, 1.0),
+            max_speed: max_speed.unwrap_or(defaults.max_speed).max(0.0),
+        };
+
         let mut rng = rand::rng();
-        let sim = sim::Simulation::random(&mut rng);
+        let sim = sim::Simulation::random_with_config(&mut rng, config);
 
         Self { rng, sim }
     }
@@ -72,7 +92,7 @@ impl Simulation {
 
 impl Default for Simulation {
     fn default() -> Self {
-        Self::new()
+        Self::new(None, None, None, None, None)
     }
 }
 
@@ -82,14 +102,14 @@ mod tests {
 
     #[test]
     fn new_creates_a_simulation_starting_at_generation_zero() {
-        let simulation = Simulation::new();
+        let simulation = Simulation::new(None, None, None, None, None);
 
         assert_eq!(simulation.generation(), 0);
     }
 
     #[test]
     fn step_does_not_evolve_before_generation_length_is_reached() {
-        let mut simulation = Simulation::new();
+        let mut simulation = Simulation::new(None, None, None, None, None);
 
         // GENERATION_LENGTH (in lib-simulation) is 2500; stepping fewer
         // times than that should never trigger evolution, and therefore
@@ -103,7 +123,7 @@ mod tests {
 
     #[test]
     fn generation_stats_reflects_the_current_generation_and_fitness_values() {
-        let simulation = Simulation::new();
+        let simulation = Simulation::new(None, None, None, None, None);
         let stats = lib_simulation::Statistics::new(&[
             AnimalIndividualStub(1.0),
             AnimalIndividualStub(3.0),

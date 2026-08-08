@@ -21,6 +21,13 @@ const statMin = document.getElementById('stat-min');
 const statMax = document.getElementById('stat-max');
 const statAvg = document.getElementById('stat-avg');
 
+const cfgNumAnimals = document.getElementById('cfg-num-animals');
+const cfgNumFoods = document.getElementById('cfg-num-foods');
+const cfgMutationChance = document.getElementById('cfg-mutation-chance');
+const cfgMutationCoeff = document.getElementById('cfg-mutation-coeff');
+const cfgMaxSpeed = document.getElementById('cfg-max-speed');
+const configApplyBtn = document.getElementById('config-apply');
+
 let isPaused = false;
 
 // History of per-generation fitness stats, used to draw the chart.
@@ -113,6 +120,21 @@ pauseBtn.onclick = function () {
 
 resetBtn.onclick = function () {
     simulation = new sim.Simulation();
+    resetStats();
+};
+
+function readConfigFromInputs() {
+    return [
+        parseInt(cfgNumAnimals.value, 10),
+        parseInt(cfgNumFoods.value, 10),
+        parseFloat(cfgMutationChance.value),
+        parseFloat(cfgMutationCoeff.value),
+        parseFloat(cfgMaxSpeed.value),
+    ];
+}
+
+configApplyBtn.onclick = function () {
+    simulation = new sim.Simulation(...readConfigFromInputs());
     resetStats();
 };
 
