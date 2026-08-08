@@ -6,7 +6,7 @@ pub use self::{
     chromosome::*, crossover::*, individual::*, mutation::*, selection::*, statistics::*,
 };
 
-use rand::{seq::SliceRandom, Rng, RngCore};
+use rand::{seq::IndexedRandom, Rng, RngExt};
 
 mod chromosome;
 mod crossover;
@@ -37,7 +37,7 @@ where
         }
     }
 
-    pub fn evolve<I>(&self, rng: &mut dyn RngCore, population: &[I]) -> (Vec<I>, Statistics)
+    pub fn evolve<I>(&self, rng: &mut dyn Rng, population: &[I]) -> (Vec<I>, Statistics)
     where
         I: Individual,
     {

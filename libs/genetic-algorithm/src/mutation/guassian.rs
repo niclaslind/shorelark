@@ -22,12 +22,12 @@ impl GaussianMutation {
 }
 
 impl MutationMethod for GaussianMutation {
-    fn mutate(&self, rng: &mut dyn RngCore, child: &mut Chromosome) {
+    fn mutate(&self, rng: &mut dyn Rng, child: &mut Chromosome) {
         for gene in child.iter_mut() {
-            let sign = if rng.gen_bool(0.5) { -1.0 } else { 1.0 };
+            let sign = if rng.random_bool(0.5) { -1.0 } else { 1.0 };
 
-            if rng.gen_bool(self.chance as _) {
-                *gene += sign * self.coeff * rng.gen::<f32>();
+            if rng.random_bool(self.chance as _) {
+                *gene += sign * self.coeff * rng.random::<f32>();
             }
         }
     }

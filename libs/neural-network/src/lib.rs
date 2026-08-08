@@ -1,7 +1,7 @@
 pub use self::layer_topology::*;
 
 use self::{layer::*, neuron::*};
-use rand::RngCore;
+use rand::Rng;
 
 mod layer;
 mod layer_topology;
@@ -17,7 +17,7 @@ impl Network {
         Self { layers }
     }
 
-    pub fn random(rng: &mut dyn RngCore, layers: &[LayerTopology]) -> Self {
+    pub fn random(rng: &mut dyn Rng, layers: &[LayerTopology]) -> Self {
         let layers = layers
             .windows(2)
             .map(|layers| Layer::random(rng, layers[0].neurons, layers[1].neurons))
@@ -81,7 +81,7 @@ mod test {
 
             assert_relative_eq!(
                 neuron.weights.as_slice(),
-                [0.67383957, 0.8181262, 0.26284897, 0.5238807].as_ref()
+                [0.67383933, 0.81812596, 0.26284885, 0.5238805].as_ref()
             );
         }
     }

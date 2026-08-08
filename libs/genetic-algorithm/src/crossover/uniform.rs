@@ -6,7 +6,7 @@ pub struct UniformCrossover;
 impl CrossoverMethod for UniformCrossover {
     fn crossover(
         &self,
-        rng: &mut dyn RngCore,
+        rng: &mut dyn Rng,
         parent_a: &Chromosome,
         parent_b: &Chromosome,
     ) -> Chromosome {
@@ -17,7 +17,7 @@ impl CrossoverMethod for UniformCrossover {
 
         parent_a
             .zip(parent_b)
-            .map(|(&a, &b)| if rng.gen_bool(0.5) { a } else { b })
+            .map(|(&a, &b)| if rng.random_bool(0.5) { a } else { b })
             .collect()
     }
 }
