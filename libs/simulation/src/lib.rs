@@ -1,4 +1,5 @@
 pub use self::{animal::*, animal_individual::*, brain::*, eye::*, food::*, world::*};
+pub use lib_genetic_algorithm::Statistics;
 use lib_genetic_algorithm as ga;
 use lib_neural_network as nn;
 use nalgebra as na;
@@ -64,6 +65,7 @@ pub struct Simulation {
     world: World,
     ga: ga::GeneticAlgorithm<ga::RouletteWheelSelection>,
     age: usize,
+    generation: usize,
 }
 
 impl Simulation {
@@ -76,11 +78,21 @@ impl Simulation {
             ga::GaussianMutation::new(0.01, 0.3),
         );
 
-        Self { world, ga, age: 0 }
+        Self {
+            world,
+            ga,
+            age: 0,
+            generation: 0,
+        }
     }
 
     pub fn world(&self) -> &World {
         &self.world
+    }
+
+    /// Returns how many full generations have been completed so far.
+    pub fn generation(&self) -> usize {
+        self.generation
     }
 
     /// Performs a single step - a single second, so to say - of our simulation
@@ -150,6 +162,7 @@ impl Simulation {
 
     fn evolve(&mut self, rng: &mut dyn Rng) -> ga::Statistics {
         self.age = 0;
+        self.generation += 1;
 
         // Step 1: Prepeare birdies to be sent into genetic algorithm
         let current_population: Vec<_> = self
