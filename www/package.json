@@ -26,12 +26,15 @@
     "url": "https://github.com/rustwasm/create-wasm-app/issues"
   },
   "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "devDependencies": {
-    "copy-webpack-plugin": "^12.0.2",
+    "copy-webpack-plugin": "^14.0.0",
     "hello-wasm-pack": "^0.1.0",
     "lib-simulation-wasm": "file:../libs/simulation-wasm/pkg",
     "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.1"
+    "webpack-cli": "^7.2.2",
+    "webpack-dev-server": "^6.0.0"
   }
 }
