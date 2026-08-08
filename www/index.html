@@ -6,9 +6,31 @@
   <title>Shorelark</title>
 </head>
 <style>
+  :root {
+    --bg: #1f2639;
+    --panel-bg: rgba(59, 70, 100, 0.85);
+    --text: #e6e9f0;
+    --btn-bg: #3b4664;
+    --btn-bg-hover: #4c5a80;
+    --viewport-bg: #1f2639;
+  }
+
+  body.light {
+    --bg: #eef1f8;
+    --panel-bg: rgba(255, 255, 255, 0.85);
+    --text: #1f2639;
+    --btn-bg: #d7dcec;
+    --btn-bg-hover: #c2c9e0;
+    --viewport-bg: #ffffff;
+  }
+
   body {
-    background: #1f2639;
+    background: var(--bg);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  #viewport {
+    background: var(--viewport-bg);
   }
 
   #controls {
@@ -25,12 +47,12 @@
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
-    background: #3b4664;
-    color: #e6e9f0;
+    background: var(--btn-bg);
+    color: var(--text);
   }
 
   #controls button:hover {
-    background: #4c5a80;
+    background: var(--btn-bg-hover);
   }
 
   #stats {
@@ -40,8 +62,8 @@
     margin: 15px;
     padding: 10px 14px;
     border-radius: 6px;
-    background: rgba(59, 70, 100, 0.85);
-    color: #e6e9f0;
+    background: var(--panel-bg);
+    color: var(--text);
     font-size: 14px;
     line-height: 1.6;
     min-width: 180px;
@@ -58,8 +80,8 @@
     margin: 15px;
     padding: 10px 14px;
     border-radius: 6px;
-    background: rgba(59, 70, 100, 0.85);
-    color: #e6e9f0;
+    background: var(--panel-bg);
+    color: var(--text);
     font-size: 12px;
   }
 
@@ -89,8 +111,8 @@
     margin: 15px;
     padding: 10px 14px;
     border-radius: 6px;
-    background: rgba(59, 70, 100, 0.85);
-    color: #e6e9f0;
+    background: var(--panel-bg);
+    color: var(--text);
     font-size: 13px;
   }
 
@@ -116,13 +138,13 @@
     padding: 5px 10px;
     border: none;
     border-radius: 4px;
-    background: #3b4664;
-    color: #e6e9f0;
+    background: var(--btn-bg);
+    color: var(--text);
     margin-top: 4px;
   }
 
   #config button:hover {
-    background: #4c5a80;
+    background: var(--btn-bg-hover);
   }
 </style>
 
@@ -133,10 +155,14 @@
     <button id="train">train please, thank u</button>
     <button id="pause">pause</button>
     <button id="reset">reset</button>
+    <button id="trails">trails: on</button>
+    <button id="theme">🌙 dark</button>
   </div>
 
   <div id="stats">
     generation: <span id="stat-generation">0</span><br>
+    animals: <span id="stat-animals">-</span><br>
+    foods: <span id="stat-foods">-</span><br>
     min fitness: <span id="stat-min">-</span><br>
     max fitness: <span id="stat-max">-</span><br>
     avg fitness: <span id="stat-avg">-</span>

@@ -28,7 +28,15 @@ const cfgMutationCoeff = document.getElementById('cfg-mutation-coeff');
 const cfgMaxSpeed = document.getElementById('cfg-max-speed');
 const configApplyBtn = document.getElementById('config-apply');
 
+const statAnimals = document.getElementById('stat-animals');
+const statFoods = document.getElementById('stat-foods');
+
+const trailsBtn = document.getElementById('trails');
+const themeBtn = document.getElementById('theme');
+
 let isPaused = false;
+let trailsEnabled = true;
+let isLightTheme = false;
 
 // History of per-generation fitness stats, used to draw the chart.
 // Capped so the chart stays readable and memory bounded over long runs.
@@ -121,6 +129,7 @@ pauseBtn.onclick = function () {
 resetBtn.onclick = function () {
     simulation = new sim.Simulation();
     resetStats();
+    ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
 };
 
 function readConfigFromInputs() {
@@ -136,9 +145,41 @@ function readConfigFromInputs() {
 configApplyBtn.onclick = function () {
     simulation = new sim.Simulation(...readConfigFromInputs());
     resetStats();
+    ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
 };
 
-CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation) {
+trailsBtn.onclick = function () {
+    trailsEnabled = !trailsEnabled;
+    trailsBtn.textContent = trailsEnabled ? 'trails: on' : 'trails: off';
+
+    if (!trailsEnabled) {
+        ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
+    }
+};
+
+themeBtn.onclick = function () {
+    isLightTheme = !isLightTheme;
+    document.body.classList.toggle('light', isLightTheme);
+    themeBtn.textContent = isLightTheme ? '☀️ light' : '🌙 dark';
+    updateThemeColors();
+    ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
+};
+
+// Colors used when drawing on the <canvas>; kept in sync with the CSS
+// theme variables so trails/birds look right in both light and dark mode.
+let viewportBgColor = 'rgb(31, 38, 57)';
+let birdColor = 'rgb(255, 255, 255)';
+
+function updateThemeColors() {
+    viewportBgColor = isLightTheme ? 'rgb(255, 255, 255)' : 'rgb(31, 38, 57)';
+    birdColor = isLightTheme ? 'rgb(31, 38, 57)' : 'rgb(255, 255, 255)';
+}
+
+function toRgba(rgb, alpha) {
+    return rgb.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+}
+
+CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation, color) {
     this.beginPath();
 
     this.moveTo(
@@ -163,7 +204,7 @@ CanvasRenderingContext2D.prototype.drawTriangle = function (x, y, size, rotation
     );
 
     this.stroke();
-    this.fillStyle = 'rgb(255, 255, 255)';
+    this.fillStyle = color;
     this.fill();
 }
 
@@ -178,7 +219,15 @@ CanvasRenderingContext2D.prototype.drawCircle = function (x, y, radius) {
 
 function redraw() {
     if (!isPaused) {
-        ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
+        if (trailsEnabled) {
+            // Instead of a full clear, paint a translucent rectangle over
+            // the previous frame so past positions fade out gradually,
+            // leaving a short motion trail behind each bird.
+            ctxt.fillStyle = toRgba(viewportBgColor, 0.15);
+            ctxt.fillRect(0, 0, viewportWidth, viewportHeight);
+        } else {
+            ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
+        }
 
         const stats = simulation.step();
 
@@ -189,6 +238,9 @@ function redraw() {
         recordStats(stats);
 
         const world = simulation.world();
+
+        statAnimals.textContent = world.animals.length;
+        statFoods.textContent = world.foods.length;
 
         for (const food of world.foods) {
             ctxt.drawCircle(
@@ -204,6 +256,7 @@ function redraw() {
                 animal.y * viewportHeight,
                 0.01 * viewportWidth,
                 animal.rotation,
+                birdColor,
             );
         }
     }
