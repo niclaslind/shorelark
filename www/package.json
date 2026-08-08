@@ -32,6 +32,6 @@
     "lib-simulation-wasm": "file: ../libs/simulation-wasm/pkg",
     "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^6.0.0"
   }
 }
