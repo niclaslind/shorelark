@@ -50,6 +50,37 @@
   #stats span {
     font-weight: bold;
   }
+
+  #chart-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 15px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: rgba(59, 70, 100, 0.85);
+    color: #e6e9f0;
+    font-size: 12px;
+  }
+
+  #chart-legend {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  #chart-legend span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #chart-legend i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
 </style>
 
 <body>
@@ -66,6 +97,15 @@
     min fitness: <span id="stat-min">-</span><br>
     max fitness: <span id="stat-max">-</span><br>
     avg fitness: <span id="stat-avg">-</span>
+  </div>
+
+  <div id="chart-container">
+    <div id="chart-legend">
+      <span><i style="background: rgb(255, 99, 99)"></i>max</span>
+      <span><i style="background: rgb(255, 220, 99)"></i>avg</span>
+      <span><i style="background: rgb(99, 170, 255)"></i>min</span>
+    </div>
+    <canvas id="chart" width="360" height="140"></canvas>
   </div>
 
   <script src="./bootstrap.js"></script>
