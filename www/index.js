@@ -33,10 +33,12 @@ const statFoods = document.getElementById('stat-foods');
 
 const trailsBtn = document.getElementById('trails');
 const themeBtn = document.getElementById('theme');
+const speedSelect = document.getElementById('speed');
 
 let isPaused = false;
 let trailsEnabled = true;
 let isLightTheme = false;
+let simSpeed = 1;
 
 // History of per-generation fitness stats, used to draw the chart.
 // Capped so the chart stays readable and memory bounded over long runs.
@@ -165,6 +167,10 @@ themeBtn.onclick = function () {
     ctxt.clearRect(0, 0, viewportWidth, viewportHeight);
 };
 
+speedSelect.onchange = function () {
+    simSpeed = parseInt(speedSelect.value, 10) || 1;
+};
+
 // Colors used when drawing on the <canvas>; kept in sync with the CSS
 // theme variables so trails/birds look right in both light and dark mode.
 let viewportBgColor = 'rgb(31, 38, 57)';
@@ -236,6 +242,17 @@ function redraw() {
         }
 
         recordStats(stats);
+
+        // Fast-forward: run the remaining steps for this frame without
+        // re-rendering in between, so higher speeds actually save wall
+        // time instead of just rendering faster.
+        for (let i = 1; i < simSpeed; i++) {
+            const extraStats = simulation.step();
+
+            if (extraStats) {
+                recordStats(extraStats);
+            }
+        }
 
         const world = simulation.world();
 
