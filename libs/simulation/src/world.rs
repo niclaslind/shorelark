@@ -23,3 +23,28 @@ impl World {
         &self.foods
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand::SeedableRng;
+    use rand_chacha::ChaCha8Rng;
+
+    #[test]
+    fn random_creates_forty_animals_and_sixty_foods() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let world = World::random(&mut rng);
+
+        assert_eq!(world.animals().len(), 40);
+        assert_eq!(world.foods().len(), 60);
+    }
+
+    #[test]
+    fn getters_expose_the_underlying_collections() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let world = World::random(&mut rng);
+
+        assert_eq!(world.animals().len(), world.animals.len());
+        assert_eq!(world.foods().len(), world.foods.len());
+    }
+}

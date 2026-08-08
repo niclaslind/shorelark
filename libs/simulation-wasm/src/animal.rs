@@ -16,3 +16,22 @@ impl From<&sim::Animal> for Animal {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand::SeedableRng;
+    use rand_chacha::ChaCha8Rng;
+
+    #[test]
+    fn from_sim_animal_copies_position_and_rotation() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let sim_animal = sim::Animal::random(&mut rng);
+
+        let animal = Animal::from(&sim_animal);
+
+        assert_eq!(animal.x, sim_animal.position().x);
+        assert_eq!(animal.y, sim_animal.position().y);
+        assert_eq!(animal.rotation, sim_animal.rotation().angle());
+    }
+}

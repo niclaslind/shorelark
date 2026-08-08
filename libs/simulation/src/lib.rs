@@ -1,6 +1,6 @@
 pub use self::{animal::*, animal_individual::*, brain::*, eye::*, food::*, world::*};
-pub use lib_genetic_algorithm::Statistics;
 use lib_genetic_algorithm as ga;
+pub use lib_genetic_algorithm::Statistics;
 use lib_neural_network as nn;
 use nalgebra as na;
 use rand::{Rng, RngExt};
@@ -189,5 +189,67 @@ impl Simulation {
             food.position = rng.random();
         }
         stats
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rand::SeedableRng;
+    use rand_chacha::ChaCha8Rng;
+
+    #[test]
+    fn random_creates_a_world_with_forty_animals_and_sixty_foods() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let simulation = Simulation::random(&mut rng);
+
+        assert_eq!(simulation.world().animals().len(), 40);
+        assert_eq!(simulation.world().foods().len(), 60);
+    }
+
+    #[test]
+    fn generation_starts_at_zero() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let simulation = Simulation::random(&mut rng);
+
+        assert_eq!(simulation.generation(), 0);
+        assert_eq!(simulation.age, 0);
+    }
+
+    #[test]
+    fn step_returns_none_until_a_generation_completes() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let mut simulation = Simulation::random(&mut rng);
+
+        for _ in 0..GENERATION_LENGTH {
+            assert!(simulation.step(&mut rng).is_none());
+        }
+
+        assert!(simulation.step(&mut rng).is_some());
+        assert_eq!(simulation.generation(), 1);
+    }
+
+    #[test]
+    fn train_advances_a_full_generation_and_returns_sane_statistics() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let mut simulation = Simulation::random(&mut rng);
+
+        let stats = simulation.train(&mut rng);
+
+        assert_eq!(simulation.generation(), 1);
+        assert_eq!(simulation.age, 0);
+        assert!(stats.min_fitness() <= stats.avg_fitness());
+        assert!(stats.avg_fitness() <= stats.max_fitness());
+    }
+
+    #[test]
+    fn train_resets_the_world_population_size() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let mut simulation = Simulation::random(&mut rng);
+
+        simulation.train(&mut rng);
+
+        assert_eq!(simulation.world().animals().len(), 40);
+        assert_eq!(simulation.world().foods().len(), 60);
     }
 }
