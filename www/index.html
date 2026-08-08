@@ -146,6 +146,15 @@
   #config button:hover {
     background: var(--btn-bg-hover);
   }
+
+  #controls select {
+    cursor: pointer;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--text);
+  }
 </style>
 
 <body>
@@ -157,6 +166,14 @@
     <button id="reset">reset</button>
     <button id="trails">trails: on</button>
     <button id="theme">🌙 dark</button>
+    <select id="speed" title="simulation speed">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="5">5x</option>
+      <option value="10">10x</option>
+      <option value="25">25x</option>
+      <option value="50">50x</option>
+    </select>
   </div>
 
   <div id="stats">
