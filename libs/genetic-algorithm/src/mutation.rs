@@ -5,5 +5,5 @@ use crate::*;
 mod guassian;
 
 pub trait MutationMethod {
-    fn mutate(&self, rng: &mut dyn RngCore, child: &mut Chromosome);
+    fn mutate(&self, rng: &mut dyn Rng, child: &mut Chromosome);
 }

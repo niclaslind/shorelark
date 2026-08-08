@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 #[derive(Clone, Debug)]
 pub struct Neuron {
@@ -13,11 +13,11 @@ impl Neuron {
         Self { bias, weights }
     }
 
-    pub fn random(rng: &mut dyn rand::RngCore, output_size: usize) -> Self {
-        let bias = rng.gen_range(-1.0..=1.0);
+    pub fn random(rng: &mut dyn Rng, output_size: usize) -> Self {
+        let bias = rng.random_range(-1.0..=1.0);
 
         let weights = (0..output_size)
-            .map(|_| rng.gen_range(-1.0..=1.0))
+            .map(|_| rng.random_range(-1.0..=1.0))
             .collect();
 
         Self::new(bias, weights)

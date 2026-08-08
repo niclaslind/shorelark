@@ -10,8 +10,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
-rand = "0.8.5"
+rand = "0.10.2"
 wasm-bindgen = { version = "0.2.100", features = ["serde-serialize"] }
 getrandom = { version = "0.2.17", features = ["js"] }
+getrandom04 = { package = "getrandom", version = "0.4.3", features = ["wasm_js"] }
 
 lib-simulation = { path = "../simulation" }

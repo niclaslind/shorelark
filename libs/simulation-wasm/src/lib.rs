@@ -1,6 +1,6 @@
 pub use self::{animal::*, food::*, world::*};
 use lib_simulation as sim;
-use rand::{prelude::ThreadRng, thread_rng};
+use rand::rngs::ThreadRng;
 use serde::Serialize;
 use wasm_bindgen::prelude::*;
 
@@ -18,7 +18,7 @@ pub struct Simulation {
 impl Simulation {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        let mut rng = thread_rng();
+        let mut rng = rand::rng();
         let sim = sim::Simulation::random(&mut rng);
 
         Self { rng, sim }

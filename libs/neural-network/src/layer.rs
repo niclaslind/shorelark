@@ -16,7 +16,7 @@ impl Layer {
         Self { neurons }
     }
 
-    pub fn random(rng: &mut dyn RngCore, input_neurons: usize, output_neurons: usize) -> Self {
+    pub fn random(rng: &mut dyn Rng, input_neurons: usize, output_neurons: usize) -> Self {
         let neurons = (0..output_neurons)
             .map(|_| Neuron::random(rng, input_neurons))
             .collect();

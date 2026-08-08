@@ -13,7 +13,7 @@ pub struct Animal {
 }
 
 impl Animal {
-    pub fn random(rng: &mut dyn RngCore) -> Self {
+    pub fn random(rng: &mut dyn Rng) -> Self {
         let eye = Eye::default();
 
         let brain = Brain::random(rng, &eye);
@@ -21,7 +21,7 @@ impl Animal {
         Self::new(eye, brain, rng)
     }
 
-    pub fn from_chromosome(chromosome: ga::Chromosome, rng: &mut dyn RngCore) -> Self {
+    pub fn from_chromosome(chromosome: ga::Chromosome, rng: &mut dyn Rng) -> Self {
         let eye = Eye::default();
         let brain = Brain::from_chromosome(chromosome, &eye);
 
@@ -40,10 +40,10 @@ impl Animal {
         self.rotation
     }
 
-    fn new(eye: Eye, brain: Brain, rng: &mut dyn RngCore) -> Self {
+    fn new(eye: Eye, brain: Brain, rng: &mut dyn Rng) -> Self {
         Self {
-            position: rng.gen(),
-            rotation: rng.gen(),
+            position: rng.random(),
+            rotation: rng.random(),
             speed: 0.002,
             eye,
             brain,

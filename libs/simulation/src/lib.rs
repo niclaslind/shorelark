@@ -2,7 +2,7 @@ pub use self::{animal::*, animal_individual::*, brain::*, eye::*, food::*, world
 use lib_genetic_algorithm as ga;
 use lib_neural_network as nn;
 use nalgebra as na;
-use rand::{Rng, RngCore};
+use rand::{Rng, RngExt};
 
 mod animal;
 mod animal_individual;
@@ -67,7 +67,7 @@ pub struct Simulation {
 }
 
 impl Simulation {
-    pub fn random(rng: &mut dyn RngCore) -> Self {
+    pub fn random(rng: &mut dyn Rng) -> Self {
         let world = World::random(rng);
 
         let ga = ga::GeneticAlgorithm::new(
@@ -84,7 +84,7 @@ impl Simulation {
     }
 
     /// Performs a single step - a single second, so to say - of our simulation
-    pub fn step(&mut self, rng: &mut dyn RngCore) -> Option<ga::Statistics> {
+    pub fn step(&mut self, rng: &mut dyn Rng) -> Option<ga::Statistics> {
         self.process_collisions(rng);
         self.process_brains();
         self.process_movements();
@@ -99,7 +99,7 @@ impl Simulation {
     }
 
     /// Fast-forwards 'till the end if the current generation.
-    pub fn train(&mut self, rng: &mut dyn RngCore) -> ga::Statistics {
+    pub fn train(&mut self, rng: &mut dyn Rng) -> ga::Statistics {
         loop {
             if let Some(summary) = self.step(rng) {
                 return summary;
@@ -107,14 +107,14 @@ impl Simulation {
         }
     }
 
-    fn process_collisions(&mut self, rng: &mut dyn RngCore) {
+    fn process_collisions(&mut self, rng: &mut dyn Rng) {
         for animal in &mut self.world.animals {
             for food in &mut self.world.foods {
                 let distance = na::distance(&animal.position, &food.position);
 
                 if distance <= 0.01 {
                     animal.satiation += 1;
-                    food.position = rng.gen();
+                    food.position = rng.random();
                 }
             }
         }
@@ -148,7 +148,7 @@ impl Simulation {
         }
     }
 
-    fn evolve(&mut self, rng: &mut dyn RngCore) -> ga::Statistics {
+    fn evolve(&mut self, rng: &mut dyn Rng) -> ga::Statistics {
         self.age = 0;
 
         // Step 1: Prepeare birdies to be sent into genetic algorithm
@@ -173,7 +173,7 @@ impl Simulation {
         // (this is not strictly necessary, but it allows to easily spot
         // when the evolution happens - so it's more of a UI thing. )
         for food in &mut self.world.foods {
-            food.position = rng.gen();
+            food.position = rng.random();
         }
         stats
     }
