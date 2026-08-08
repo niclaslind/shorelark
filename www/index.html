@@ -8,18 +8,66 @@
 <style>
   body {
     background: #1f2639;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   }
 
-  #train {
+  #controls {
     position: absolute;
     top: 0;
+    left: 0;
     margin: 15px;
+    display: flex;
+    gap: 8px;
+  }
+
+  #controls button {
+    cursor: pointer;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    background: #3b4664;
+    color: #e6e9f0;
+  }
+
+  #controls button:hover {
+    background: #4c5a80;
+  }
+
+  #stats {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 15px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: rgba(59, 70, 100, 0.85);
+    color: #e6e9f0;
+    font-size: 14px;
+    line-height: 1.6;
+    min-width: 180px;
+  }
+
+  #stats span {
+    font-weight: bold;
   }
 </style>
 
 <body>
   <canvas id="viewport" width="800" , height="800"></canvas>
-  <button id="train">train please, thank u</button>
+
+  <div id="controls">
+    <button id="train">train please, thank u</button>
+    <button id="pause">pause</button>
+    <button id="reset">reset</button>
+  </div>
+
+  <div id="stats">
+    generation: <span id="stat-generation">0</span><br>
+    min fitness: <span id="stat-min">-</span><br>
+    max fitness: <span id="stat-max">-</span><br>
+    avg fitness: <span id="stat-avg">-</span>
+  </div>
+
   <script src="./bootstrap.js"></script>
 </body>
 

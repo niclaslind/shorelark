@@ -29,13 +29,27 @@ impl Simulation {
         JsValue::from_serde(&world).unwrap()
     }
 
-    pub fn step(&mut self) {
-        self.sim.step(&mut self.rng);
+    /// Advances the simulation by a single step.
+    ///
+    /// Returns a formatted statistics string whenever a generation has just
+    /// finished (i.e. the population evolved), or `None` otherwise.
+    pub fn step(&mut self) -> Option<String> {
+        self.sim.step(&mut self.rng).map(|stats| Self::format_stats(&stats))
     }
 
     pub fn train(&mut self) -> String {
         let stats = self.sim.train(&mut self.rng);
 
+        Self::format_stats(&stats)
+    }
+
+    /// Current generation number (how many times the population has
+    /// evolved so far).
+    pub fn generation(&self) -> usize {
+        self.sim.generation()
+    }
+
+    fn format_stats(stats: &sim::Statistics) -> String {
         format!(
             "min={:.2}, max={:.2}, avg={:.2}",
             stats.min_fitness(),
