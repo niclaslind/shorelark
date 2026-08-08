@@ -14,3 +14,4 @@ lib-genetic-algorithm = { path = "../genetic-algorithm" }
 
 [dev-dependencies]
 test-case = "3.1.0"
+rand_chacha = "0.10.0"

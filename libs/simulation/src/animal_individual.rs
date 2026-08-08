@@ -36,3 +36,61 @@ impl ga::Individual for AnimalIndividual {
         self.fitness
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use ga::Individual;
+    use rand::SeedableRng;
+    use rand_chacha::ChaCha8Rng;
+
+    #[test]
+    fn from_animal_uses_satiation_as_fitness() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let mut animal = Animal::random(&mut rng);
+        animal.satiation = 7;
+
+        let individual = AnimalIndividual::from_animal(&animal);
+
+        assert_eq!(individual.fitness(), 7.0);
+    }
+
+    #[test]
+    fn from_animal_carries_over_the_chromosome() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let animal = Animal::random(&mut rng);
+
+        let individual = AnimalIndividual::from_animal(&animal);
+
+        assert_eq!(
+            individual.chromosome().iter().collect::<Vec<_>>(),
+            animal.as_chromosome().iter().collect::<Vec<_>>(),
+        );
+    }
+
+    #[test]
+    fn into_animal_rebuilds_the_brain_from_the_chromosome() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let animal = Animal::random(&mut rng);
+        let chromosome = animal.as_chromosome();
+
+        let individual = AnimalIndividual::from_animal(&animal);
+        let rebuilt = individual.into_animal(&mut rng);
+
+        assert_eq!(
+            rebuilt.as_chromosome().into_iter().collect::<Vec<_>>(),
+            chromosome.into_iter().collect::<Vec<_>>(),
+        );
+    }
+
+    #[test]
+    fn create_starts_with_zero_fitness() {
+        let mut rng = ChaCha8Rng::from_seed(Default::default());
+        let animal = Animal::random(&mut rng);
+        let chromosome = animal.as_chromosome();
+
+        let individual = AnimalIndividual::create(chromosome);
+
+        assert_eq!(individual.fitness(), 0.0);
+    }
+}

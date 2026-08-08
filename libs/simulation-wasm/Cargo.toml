@@ -16,3 +16,7 @@ getrandom = { version = "0.2.17", features = ["js"] }
 getrandom04 = { package = "getrandom", version = "0.4.3", features = ["wasm_js"] }
 
 lib-simulation = { path = "../simulation" }
+
+[dev-dependencies]
+rand_chacha = "0.10.0"
+lib-genetic-algorithm = { path = "../genetic-algorithm" }

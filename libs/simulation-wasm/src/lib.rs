@@ -75,3 +75,64 @@ impl Default for Simulation {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn new_creates_a_simulation_starting_at_generation_zero() {
+        let simulation = Simulation::new();
+
+        assert_eq!(simulation.generation(), 0);
+    }
+
+    #[test]
+    fn step_does_not_evolve_before_generation_length_is_reached() {
+        let mut simulation = Simulation::new();
+
+        // GENERATION_LENGTH (in lib-simulation) is 2500; stepping fewer
+        // times than that should never trigger evolution, and therefore
+        // never touch the (wasm-only) JsValue::from_serde path.
+        for _ in 0..100 {
+            let _ = simulation.step();
+        }
+
+        assert_eq!(simulation.generation(), 0);
+    }
+
+    #[test]
+    fn generation_stats_reflects_the_current_generation_and_fitness_values() {
+        let simulation = Simulation::new();
+        let stats = lib_simulation::Statistics::new(&[
+            AnimalIndividualStub(1.0),
+            AnimalIndividualStub(3.0),
+            AnimalIndividualStub(5.0),
+        ]);
+
+        let generation_stats = simulation.generation_stats(&stats);
+
+        assert_eq!(generation_stats.generation, simulation.generation());
+        assert_eq!(generation_stats.min_fitness, 1.0);
+        assert_eq!(generation_stats.max_fitness, 5.0);
+        assert_eq!(generation_stats.avg_fitness, 3.0);
+    }
+
+    /// Minimal stand-in for `AnimalIndividual` used only to exercise
+    /// `Statistics::new` without depending on a full `Animal`.
+    struct AnimalIndividualStub(f32);
+
+    impl lib_genetic_algorithm::Individual for AnimalIndividualStub {
+        fn create(_chromosome: lib_genetic_algorithm::Chromosome) -> Self {
+            unimplemented!()
+        }
+
+        fn chromosome(&self) -> &lib_genetic_algorithm::Chromosome {
+            unimplemented!()
+        }
+
+        fn fitness(&self) -> f32 {
+            self.0
+        }
+    }
+}

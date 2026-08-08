@@ -371,6 +371,7 @@ dependencies = [
  "lib-neural-network",
  "nalgebra",
  "rand",
+ "rand_chacha",
  "test-case",
 ]
 
@@ -380,8 +381,10 @@ version = "0.1.0"
 dependencies = [
  "getrandom 0.2.17",
  "getrandom 0.4.3",
+ "lib-genetic-algorithm",
  "lib-simulation",
  "rand",
+ "rand_chacha",
  "serde",
  "wasm-bindgen",
 ]
